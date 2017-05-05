@@ -1,0 +1,123 @@
+List of tables:	
+1.	Cities
+2.	Theatres
+3.	Movies
+4.	Booking
+5.	Movie_Theate (Link Table with two primary key)
+
+Below are the tables created in BookMyshow databse:
+
+1.	Create table Cities(
+cityID int NOT NULL,
+cityName varchar(20)
+primary key cityID
+)
+
+2.	Create table movies(
+movieID int NOT NULL,
+movieName varchar(20),
+movieDuration int,
+moviePrice int,
+cityID int
+primary key(movieID), 				
+Foreign key(cityID) refernces cityList(cityID)
+);
+
+3.	Create table Theatres(
+theatreID int NOT NULL,
+theatreName varchar(20),
+theatreAddr varchar(20),
+cityID int,
+no_shows int,
+no_seats int,
+primary key theatreID,
+foreign key(cityID) references cityList(cityID));
+
+4.	Create table movies_theatre(
+Movie_id int,
+Theatre_id int,
+primary key(movie_id, theatre_id)
+foreign key(movie_id) references movies(movie_id),
+foreign key(theatre_id) references Theatres(theatre_id));
+
+
+
+
+
+
+5.	Table Name: Book-Seat
+
+6.	create table bookseat(
+    -> bookingID int NOT NULL,
+    -> movieID int,
+    -> theatreID int,
+    -> primary key(bookingID),
+    -> foreign key(movieID,theatreID) references movies_theatre(movieID,theatreID));
+
+
+
+Example data:
+
+1.	select * from cities;
++--------+------------+
+| cityID | cityName   |
++--------+------------+
+|      1 | Bangalore  |
+|      2 | Davanagere |
++--------+------------+
+
+2.	select * from movies;
++---------+-----------+---------------+------------+--------+
+| movieID | movieName | movieDuration | moviePrice | cityID |
++---------+-----------+---------------+------------+--------+
+|     100 | Border    |           120 |        150 |      1 |
+|     101 | Kirik     |           125 |        160 |      1 |
+|     102 | shuddi    |           120 |        150 |      1 |
++---------+-----------+---------------+------------+--------+
+
+3.	select * from theatres;
++-----------+-------------+-------------+--------+----------+----------+
+| theatreID | theatreName | theatreAddr | cityID | no_seats | no_shows |
++-----------+-------------+-------------+--------+----------+----------+
+|       200 | Ashoka      | pb road,dvg |      1 |       60 |        4 |
+|       201 | Urvashi     | lalbagh     |      1 |       60 |        4 |
+|       202 | Amit        | PBroad      |      2 |       40 |        3 |
+|       203 | PVR         | JPNagar     |      2 |       40 |        4 |
++-----------+-------------+-------------+--------+----------+----------+
+
+
+
+
+
+4.	select * from movies_theatre;
+
++---------+-----------+
+| movieID | theatreID |
++---------+-----------+
+|     100 |       201 |
+|     100 |       202 |
++---------+-----------+
+
+5.	select * from bookseat;
++-----------+---------+-----------+
+| bookingID | movieID | theatreID |
++-----------+---------+-----------+
+|     10001 |     100 |       201 |
++-----------+---------+-----------+
+
+6.	select * from movies_theatre;
++---------+-----------+
+| movieID | theatreID |
++---------+-----------+
+|     100 |       201 |
+|     100 |       202 |
++---------+-----------+
+2 rows in set (0.00 sec)
+
+7.	insert into bookseat values(10002,100,200);
+
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bms`.`bookseat`, CONSTRAINT `bookseat_ibfk_1` FOREIGN KEY (`movieID`, `theatreID`) REFERENCES `movies_theatre` (`movieID`, `theatreID`))
+Note : Foreign Key constraint.
+
+
+
